@@ -1,0 +1,26 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "monkey_c",
+      "camelcase": "MonkeyC",
+      "scope": "source.monkey-c",
+      "path": ".",
+      "file-types": ["mc"],
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree-sitter grammar for Monkey C",
+    "authors": [
+      {
+        "name": "Simon Sawert"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/bombsimon/tree-sitter-monkey-c"
+    }
+  }
+}

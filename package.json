@@ -1,0 +1,19 @@
+{
+  "name": "tree-sitter-monkey-c",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for Monkey C",
+  "main": "bindings/node",
+  "keywords": [
+    "tree-sitter",
+    "parser",
+    "monkey-c"
+  ],
+  "scripts": {
+    "format": "prettier --write grammar.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.6.0",
+    "tree-sitter-cli": "^0.24.7"
+  }
+}

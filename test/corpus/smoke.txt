@@ -1,0 +1,580 @@
+=====================================
+Imports and declarations
+=====================================
+
+using Toybox.Lang;
+import Toybox.Math as M;
+
+class A {
+  var speed as Float;
+  function f(x as Number) as Void {
+    if (x > 0) {
+      return;
+    }
+  }
+}
+
+
+---
+
+(source_file
+  (use_statement
+    module: (qualified_identifier
+      (identifier)
+      (identifier)))
+  (import_statement
+    module: (qualified_identifier
+      (identifier)
+      (identifier))
+    alias: (identifier))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (variable_declaration
+        name: (identifier)
+        type: (type_hint
+          type: (type
+            (type_item
+              (type_primary
+                (type_name
+                  (identifier)))))))
+      (function_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (parameter
+            name: (identifier)
+            type: (type_hint
+              type: (type
+                (type_item
+                  (type_primary
+                    (type_name
+                      (identifier))))))))
+        return_type: (type_hint
+          type: (type
+            (type_item
+              (type_primary
+                (type_name
+                  (identifier))))))
+        body: (block
+          (if_statement
+            condition: (expression
+              (binary_expression
+                left: (expression
+                  (identifier))
+                right: (expression
+                  (number_literal))))
+            consequence: (block
+              (return_statement))))))))
+=====================================
+Modern return union type
+=====================================
+
+public function getSettingsView() as [Views] or [Views, InputDelegates] or Null {
+  return [new $.zRenardWatchMenu(), new $.zRenardWatchMenuDelegate()];
+}
+
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (formal_parameters)
+    return_type: (type_hint
+      type: (type
+        (type_item
+          (type_primary
+            (bracket_type
+              (type
+                (type_item
+                  (type_primary
+                    (type_name
+                      (identifier))))))))
+        (type_item
+          (type_primary
+            (bracket_type
+              (type
+                (type_item
+                  (type_primary
+                    (type_name
+                      (identifier)))))
+              (type
+                (type_item
+                  (type_primary
+                    (type_name
+                      (identifier))))))))
+        (type_item
+          (type_primary
+            (type_name
+              (identifier))))))
+    body: (block
+      (return_statement
+        value: (expression
+          (array
+            (expression
+              (new_expression
+                constructor: (symbol_reference
+                  (identifier))
+                arguments: (arguments)))
+            (expression
+              (new_expression
+                constructor: (symbol_reference
+                  (identifier))
+                arguments: (arguments)))))))))
+=====================================
+Nullable type hint
+=====================================
+
+private var _foo as Number?;
+
+---
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    type: (type_hint
+      type: (type
+        (type_item
+          (nullable_type
+            (type_primary
+              (type_name
+                (identifier)))))))))
+=====================================
+Enum declaration
+=====================================
+
+enum /* ProtocolSend */ {
+  PROTOCOL_SEND_OPEN_APP = 0,
+  PROTOCOL_SEND_SETTINGS = 1,
+}
+
+
+---
+
+(source_file
+  (enum_declaration
+    (comment)
+    (enum_member
+      (identifier)
+      (expression
+        (number_literal)))
+    (enum_member
+      (identifier)
+      (expression
+        (number_literal)))))
+=====================================
+Dictionary type parameter
+=====================================
+
+public function initialize(
+  settings as {
+    :callback as (Method(input as String) as Void),
+    :input as String,
+    :separator as String,
+    :separatorLimit as Number,
+    :vibrate as Boolean,
+  }
+) {}
+
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (formal_parameters
+      (parameter
+        name: (identifier)
+        type: (type_hint
+          type: (type
+            (type_item
+              (type_primary
+                (dictionary_type
+                  (dictionary_type_entry
+                    (symbol_key
+                      (identifier))
+                    (type_hint
+                      type: (type
+                        (type_item
+                          (type_primary
+                            (method_type
+                              (formal_parameters
+                                (parameter
+                                  name: (identifier)
+                                  type: (type_hint
+                                    type: (type
+                                      (type_item
+                                        (type_primary
+                                          (type_name
+                                            (identifier))))))))
+                              (type_hint
+                                type: (type
+                                  (type_item
+                                    (type_primary
+                                      (type_name
+                                        (identifier))))))))))))
+                  (dictionary_type_entry
+                    (symbol_key
+                      (identifier))
+                    (type_hint
+                      type: (type
+                        (type_item
+                          (type_primary
+                            (type_name
+                              (identifier)))))))
+                  (dictionary_type_entry
+                    (symbol_key
+                      (identifier))
+                    (type_hint
+                      type: (type
+                        (type_item
+                          (type_primary
+                            (type_name
+                              (identifier)))))))
+                  (dictionary_type_entry
+                    (symbol_key
+                      (identifier))
+                    (type_hint
+                      type: (type
+                        (type_item
+                          (type_primary
+                            (type_name
+                              (identifier)))))))
+                  (dictionary_type_entry
+                    (symbol_key
+                      (identifier))
+                    (type_hint
+                      type: (type
+                        (type_item
+                          (type_primary
+                            (type_name
+                              (identifier))))))))))))))
+    body: (block)))
+=====================================
+Dictionary literals and using
+=====================================
+
+using Toybox.System;
+var myDict = {
+  "One" => 1,
+  "Two" => 2,
+  "Three" => 3,
+};
+System.println(myDict);
+var keys = myDict.keys();
+var values = myDict.values();
+myDict.put("Four", 4);
+System.println(myDict);
+numItems = myDict.size();
+myDict = {};
+System.println(myDict.isEmpty());
+
+
+---
+
+(source_file
+  (use_statement
+    module: (qualified_identifier
+      (identifier)
+      (identifier)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression
+      (dictionary
+        (dictionary_entry
+          key: (expression
+            (string_literal))
+          value: (expression
+            (number_literal)))
+        (dictionary_entry
+          key: (expression
+            (string_literal))
+          value: (expression
+            (number_literal)))
+        (dictionary_entry
+          key: (expression
+            (string_literal))
+          value: (expression
+            (number_literal))))))
+  (expression_statement
+    (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments
+          (expression
+            (identifier))))))
+  (variable_declaration
+    name: (identifier)
+    value: (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments))))
+  (variable_declaration
+    name: (identifier)
+    value: (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments))))
+  (expression_statement
+    (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments
+          (expression
+            (string_literal))
+          (expression
+            (number_literal))))))
+  (expression_statement
+    (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments
+          (expression
+            (identifier))))))
+  (expression_statement
+    (expression
+      (assignment_expression
+        left: (identifier)
+        right: (expression
+          (call_expression
+            function: (member_expression
+              object: (identifier)
+              property: (identifier))
+            arguments: (arguments))))))
+  (expression_statement
+    (expression
+      (assignment_expression
+        left: (identifier)
+        right: (expression
+          (dictionary)))))
+  (expression_statement
+    (expression
+      (call_expression
+        function: (member_expression
+          object: (identifier)
+          property: (identifier))
+        arguments: (arguments
+          (expression
+            (call_expression
+              function: (member_expression
+                object: (identifier)
+                property: (identifier))
+              arguments: (arguments))))))))
+=====================================
+Control flow and static examples
+=====================================
+
+switch (myValue) {
+  case true:
+    var a = 1;
+  case 1:
+    var z = a;
+    break;
+  case "B": {
+    var a = true;
+    break;
+  }
+  case instanceof MyClass:
+    var a = "Hello!";
+  default:
+    a = 0;
+    var b = a;
+}
+
+var myCounter = 0;
+do {
+  myCounter++;
+} while (myCounter < 10);
+
+myCounter = 0;
+while (myCounter < 10) {
+  myCounter++;
+}
+
+for (var i = 0; i < 10; i += 1) {
+  if (i < 5) {
+    continue;
+  }
+  if (7 == i) {
+    break;
+  }
+}
+
+try {
+} catch (e) {
+}
+
+class Conversion {
+  static const FEET_PER_METER = 3.28084;
+}
+
+using Toybox.System as System;
+class MyClass {
+  function() {
+    $.myFunction();
+  }
+}
+
+
+---
+
+(source_file
+  (switch_statement
+    value: (expression
+      (identifier))
+    case: (switch_case
+      pattern: (case_pattern
+        (expression
+          (boolean_literal)))
+      body: (variable_declaration
+        name: (identifier)
+        value: (expression
+          (number_literal))))
+    case: (switch_case
+      pattern: (case_pattern
+        (expression
+          (number_literal)))
+      body: (variable_declaration
+        name: (identifier)
+        value: (expression
+          (identifier)))
+      body: (break_statement))
+    case: (switch_case
+      pattern: (case_pattern
+        (expression
+          (string_literal)))
+      body: (block
+        (variable_declaration
+          name: (identifier)
+          value: (expression
+            (boolean_literal)))
+        (break_statement)))
+    case: (switch_case
+      pattern: (case_pattern
+        (type
+          (type_item
+            (type_primary
+              (type_name
+                (identifier))))))
+      body: (variable_declaration
+        name: (identifier)
+        value: (expression
+          (string_literal))))
+    default: (default_case
+      (expression_statement
+        (expression
+          (assignment_expression
+            left: (identifier)
+            right: (expression
+              (number_literal)))))
+      (variable_declaration
+        name: (identifier)
+        value: (expression
+          (identifier)))))
+  (variable_declaration
+    name: (identifier)
+    value: (expression
+      (number_literal)))
+  (do_while_statement
+    body: (block
+      (expression_statement
+        (expression
+          (unary_expression
+            (identifier)))))
+    condition: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        right: (expression
+          (number_literal)))))
+  (expression_statement
+    (expression
+      (assignment_expression
+        left: (identifier)
+        right: (expression
+          (number_literal)))))
+  (while_statement
+    condition: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        right: (expression
+          (number_literal))))
+    body: (block
+      (expression_statement
+        (expression
+          (unary_expression
+            (identifier))))))
+  (for_statement
+    initializer: (variable_declaration_no_semicolon
+      (identifier)
+      (expression
+        (number_literal)))
+    condition: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        right: (expression
+          (number_literal))))
+    update: (expression
+      (assignment_expression
+        left: (identifier)
+        right: (expression
+          (number_literal))))
+    body: (block
+      (if_statement
+        condition: (expression
+          (binary_expression
+            left: (expression
+              (identifier))
+            right: (expression
+              (number_literal))))
+        consequence: (block
+          (continue_statement)))
+      (if_statement
+        condition: (expression
+          (binary_expression
+            left: (expression
+              (number_literal))
+            right: (expression
+              (identifier))))
+        consequence: (block
+          (break_statement)))))
+  (try_statement
+    body: (block)
+    exception: (identifier)
+    handler: (block))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (variable_declaration
+        name: (identifier)
+        value: (expression
+          (float_literal)))))
+  (use_statement
+    module: (qualified_identifier
+      (identifier)
+      (identifier))
+    alias: (identifier))
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (function_declaration
+        parameters: (formal_parameters)
+        body: (block
+          (expression_statement
+            (expression
+              (call_expression
+                function: (symbol_reference
+                  (identifier))
+                arguments: (arguments)))))))))
