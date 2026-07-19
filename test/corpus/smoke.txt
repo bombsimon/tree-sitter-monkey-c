@@ -65,6 +65,7 @@ class A {
                   (number_literal))))
             consequence: (block
               (return_statement))))))))
+
 =====================================
 Modern return union type
 =====================================
@@ -78,6 +79,7 @@ public function getSettingsView() as [Views] or [Views, InputDelegates] or Null 
 
 (source_file
   (function_declaration
+    (modifier)
     name: (identifier)
     parameters: (formal_parameters)
     return_type: (type_hint
@@ -121,6 +123,7 @@ public function getSettingsView() as [Views] or [Views, InputDelegates] or Null 
                 constructor: (symbol_reference
                   (identifier))
                 arguments: (arguments)))))))))
+
 =====================================
 Nullable type hint
 =====================================
@@ -131,6 +134,7 @@ private var _foo as Number?;
 
 (source_file
   (variable_declaration
+    (modifier)
     name: (identifier)
     type: (type_hint
       type: (type
@@ -139,6 +143,7 @@ private var _foo as Number?;
             (type_primary
               (type_name
                 (identifier)))))))))
+
 =====================================
 Enum declaration
 =====================================
@@ -162,6 +167,7 @@ enum /* ProtocolSend */ {
       (identifier)
       (expression
         (number_literal)))))
+
 =====================================
 Dictionary type parameter
 =====================================
@@ -181,6 +187,7 @@ public function initialize(
 
 (source_file
   (function_declaration
+    (modifier)
     name: (identifier)
     parameters: (formal_parameters
       (parameter
@@ -250,6 +257,7 @@ public function initialize(
                             (type_name
                               (identifier))))))))))))))
     body: (block)))
+
 =====================================
 Dictionary literals and using
 =====================================
@@ -370,6 +378,7 @@ System.println(myDict.isEmpty());
                 object: (identifier)
                 property: (identifier))
               arguments: (arguments))))))))
+
 =====================================
 Control flow and static examples
 =====================================
@@ -558,6 +567,7 @@ class MyClass {
     name: (identifier)
     body: (class_body
       (variable_declaration
+        (modifier)
         name: (identifier)
         value: (expression
           (float_literal)))))
@@ -578,3 +588,183 @@ class MyClass {
                 function: (symbol_reference
                   (identifier))
                 arguments: (arguments)))))))))
+=====================================
+Numeric literal forms
+=====================================
+
+var a = 0xFFCC00;
+var b = 0x800l;
+var c = 1.0f;
+var d = 5f;
+var e = 5d;
+var g = 1.5e-2;
+var h = .978;
+var i = 42l;
+var j = 3.14d;
+var k = 0.toFloat();
+
+---
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    value: (expression (hex_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (long_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (float_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (float_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (double_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (float_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (float_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (long_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression (double_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (expression
+      (call_expression
+        function: (member_expression
+          object: (number_literal)
+          property: (identifier))
+        arguments: (arguments)))))
+=====================================
+Typedef and interface type
+=====================================
+
+typedef Numeric as Number or Float or Long;
+typedef Ident as Number | Float | Null;
+typedef Drawable as interface {
+  function draw(dc as Graphics.Dc) as Void;
+  var identifier as Symbol;
+};
+
+---
+
+(source_file
+  (typedef_declaration
+    name: (identifier)
+    type: (type_hint
+      type: (type
+        (type_item (type_primary (type_name (identifier))))
+        (type_item (type_primary (type_name (identifier))))
+        (type_item (type_primary (type_name (identifier)))))))
+  (typedef_declaration
+    name: (identifier)
+    type: (type_hint
+      type: (type
+        (type_item (type_primary (type_name (identifier))))
+        (type_item (type_primary (type_name (identifier))))
+        (type_item (type_primary (type_name (identifier)))))))
+  (typedef_declaration
+    name: (identifier)
+    type: (type_hint
+      type: (type
+        (type_item
+          (type_primary
+            (interface_type
+              (interface_member
+                (interface_method
+                  name: (identifier)
+                  parameters: (formal_parameters
+                    (parameter
+                      name: (identifier)
+                      type: (type_hint
+                        type: (type
+                          (type_item
+                            (type_primary
+                              (type_name (qualified_identifier (identifier) (identifier)))))))))
+                  return_type: (type_hint
+                    type: (type
+                      (type_item (type_primary (type_name (identifier))))))))
+              (interface_member
+                (interface_variable
+                  name: (identifier)
+                  type: (type_hint
+                    type: (type
+                      (type_item (type_primary (type_name (identifier)))))))))))))))
+=====================================
+Modifiers and native functions
+=====================================
+
+public static function foo() as Void {}
+hidden native function bar();
+private static var count as Number = 0;
+
+---
+
+(source_file
+  (function_declaration
+    (modifier)
+    (modifier)
+    name: (identifier)
+    parameters: (formal_parameters)
+    return_type: (type_hint
+      type: (type (type_item (type_primary (type_name (identifier))))))
+    body: (block))
+  (function_declaration
+    (modifier)
+    (modifier)
+    name: (identifier)
+    parameters: (formal_parameters))
+  (variable_declaration
+    (modifier)
+    (modifier)
+    name: (identifier)
+    type: (type_hint
+      type: (type (type_item (type_primary (type_name (identifier))))))
+    value: (expression (number_literal))))
+=====================================
+Member access on self and me
+=====================================
+
+class C {
+  function f() {
+    self.render(me);
+    me._value = self.data[0];
+  }
+}
+
+---
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (function_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (expression_statement
+            (expression
+              (call_expression
+                function: (member_expression
+                  object: (self_literal)
+                  property: (identifier))
+                arguments: (arguments
+                  (expression (me_literal))))))
+          (expression_statement
+            (expression
+              (assignment_expression
+                left: (member_expression
+                  object: (me_literal)
+                  property: (identifier))
+                right: (expression
+                  (subscript_expression
+                    object: (member_expression
+                      object: (self_literal)
+                      property: (identifier))
+                    index: (expression (number_literal)))))))))))) 

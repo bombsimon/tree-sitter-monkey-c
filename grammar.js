@@ -20,6 +20,7 @@ module.exports = grammar({
         $.import_statement,
         $.use_statement,
         $.enum_declaration,
+        $.typedef_declaration,
         $.module_declaration,
         $.class_declaration,
         $.function_declaration,
@@ -59,7 +60,7 @@ module.exports = grammar({
 
     class_declaration: ($) =>
       seq(
-        optional(choice("private", "public", "protected")),
+        repeat($.modifier),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("superclass", $.type_name))),
@@ -68,7 +69,7 @@ module.exports = grammar({
 
     module_declaration: ($) =>
       seq(
-        optional(choice("private", "public", "protected")),
+        repeat($.modifier),
         "module",
         field("name", $.identifier),
         field("body", $.class_body),
@@ -80,6 +81,7 @@ module.exports = grammar({
       choice(
         $.annotation,
         $.enum_declaration,
+        $.typedef_declaration,
         $.function_declaration,
         $.variable_declaration,
         $.class_declaration,
@@ -91,14 +93,36 @@ module.exports = grammar({
 
     enum_member: ($) => seq($.identifier, "=", $.expression, ","),
 
+    typedef_declaration: ($) =>
+      seq(
+        optional(choice("private", "public", "protected", "hidden")),
+        "typedef",
+        field("name", $.identifier),
+        field("type", $.type_hint),
+        ";",
+      ),
+
+    // Modifiers may be combined (`public static`, `hidden native`), so accept
+    // any run of them rather than a single choice.
+    modifier: ($) =>
+      choice(
+        "private",
+        "public",
+        "protected",
+        "hidden",
+        "static",
+        "native",
+      ),
+
     function_declaration: ($) =>
       seq(
-        optional(choice("private", "public", "protected", "hidden", "static")),
+        repeat($.modifier),
         "function",
         optional(field("name", $.identifier)),
         field("parameters", $.formal_parameters),
         optional(field("return_type", $.type_hint)),
-        field("body", $.block),
+        // A `native` function has no body — just a terminating `;`.
+        choice(field("body", $.block), ";"),
       ),
 
     formal_parameters: ($) =>
@@ -115,8 +139,7 @@ module.exports = grammar({
 
     variable_declaration: ($) =>
       seq(
-        optional(choice("private", "public", "protected", "hidden")),
-        optional("static"),
+        repeat($.modifier),
         choice("var", "const"),
         field("name", $.identifier),
         optional(field("type", $.type_hint)),
@@ -126,7 +149,8 @@ module.exports = grammar({
 
     type_hint: ($) => seq("as", field("type", $.type)),
 
-    type: ($) => prec.left(seq($.type_item, repeat(seq("or", $.type_item)))),
+    type: ($) =>
+      prec.left(seq($.type_item, repeat(seq(choice("or", "|"), $.type_item)))),
 
     type_item: ($) => choice($.nullable_type, $.type_primary),
     nullable_type: ($) => seq($.type_primary, "?"),
@@ -138,7 +162,25 @@ module.exports = grammar({
         $.bracket_type,
         $.dictionary_type,
         $.method_type,
+        $.interface_type,
       ),
+
+    interface_type: ($) =>
+      seq("interface", "{", repeat($.interface_member), "}"),
+
+    interface_member: ($) => choice($.interface_method, $.interface_variable),
+
+    interface_method: ($) =>
+      seq(
+        "function",
+        field("name", $.identifier),
+        field("parameters", $.formal_parameters),
+        optional(field("return_type", $.type_hint)),
+        ";",
+      ),
+
+    interface_variable: ($) =>
+      seq("var", field("name", $.identifier), field("type", $.type_hint), ";"),
 
     generic_type: ($) =>
       prec.right(seq($.type_name, "<", $.type, repeat(seq(",", $.type)), ">")),
@@ -290,6 +332,7 @@ module.exports = grammar({
         $.nan_literal,
         $.identifier,
         $.number_literal,
+        $.hex_literal,
         $.long_literal,
         $.double_literal,
         $.float_literal,
@@ -452,6 +495,11 @@ module.exports = grammar({
               $.subscript_expression,
               $.parenthesized_expression,
               $.member_expression,
+              $.me_literal,
+              $.self_literal,
+              $.number_literal,
+              $.hex_literal,
+              $.long_literal,
             ),
           ),
           ".",
@@ -472,6 +520,8 @@ module.exports = grammar({
               $.member_expression,
               $.subscript_expression,
               $.parenthesized_expression,
+              $.me_literal,
+              $.self_literal,
             ),
           ),
           "[",
@@ -530,9 +580,32 @@ module.exports = grammar({
     identifier: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
 
     number_literal: ($) => token(/\d+/),
-    long_literal: ($) => token(/\d+[lL]/),
-    double_literal: ($) => token(/\d+\.\d+[dD]/),
-    float_literal: ($) => token(/\d+\.\d+/),
+    hex_literal: ($) => token(/0[xX][0-9a-fA-F]+/),
+    long_literal: ($) => token(choice(/\d+[lL]/, /0[xX][0-9a-fA-F]+[lL]/)),
+
+    // A float can carry an exponent, a leading `.`, or an `f` suffix, and may
+    // omit the fractional part when the `f` suffix is present (`5f`).
+    float_literal: ($) =>
+      token(
+        choice(
+          /\d+\.\d+([eE][+-]?\d+)?[fF]?/,
+          /\.\d+([eE][+-]?\d+)?[fF]?/,
+          /\d+[eE][+-]?\d+[fF]?/,
+          /\d+[fF]/,
+        ),
+      ),
+
+    // A double mirrors the float forms but ends in a `d` suffix, and like `5d`
+    // may drop the fractional part entirely.
+    double_literal: ($) =>
+      token(
+        choice(
+          /\d+\.\d+([eE][+-]?\d+)?[dD]/,
+          /\.\d+([eE][+-]?\d+)?[dD]/,
+          /\d+[eE][+-]?\d+[dD]/,
+          /\d+[dD]/,
+        ),
+      ),
 
     string_literal: ($) =>
       token(seq('"', repeat(choice(/[^"\\\n]/, /\\./)), '"')),

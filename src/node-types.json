@@ -271,6 +271,10 @@
           "named": true
         },
         {
+          "type": "typedef_declaration",
+          "named": true
+        },
+        {
           "type": "use_statement",
           "named": true
         },
@@ -418,6 +422,10 @@
           "named": true
         },
         {
+          "type": "typedef_declaration",
+          "named": true
+        },
+        {
           "type": "variable_declaration",
           "named": true
         }
@@ -458,6 +466,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -539,6 +557,10 @@
         },
         {
           "type": "try_statement",
+          "named": true
+        },
+        {
+          "type": "typedef_declaration",
           "named": true
         },
         {
@@ -744,6 +766,10 @@
           "named": true
         },
         {
+          "type": "hex_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -900,7 +926,7 @@
     "fields": {
       "body": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "block",
@@ -938,6 +964,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1052,6 +1088,102 @@
     }
   },
   {
+    "type": "interface_member",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "interface_method",
+          "named": true
+        },
+        {
+          "type": "interface_variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_method",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "formal_parameters",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_hint",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "interface_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "interface_member",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_variable",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_hint",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "member_expression",
     "named": true,
     "fields": {
@@ -1064,7 +1196,19 @@
             "named": true
           },
           {
+            "type": "hex_literal",
+            "named": true
+          },
+          {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "long_literal",
+            "named": true
+          },
+          {
+            "type": "me_literal",
             "named": true
           },
           {
@@ -1072,7 +1216,15 @@
             "named": true
           },
           {
+            "type": "number_literal",
+            "named": true
+          },
+          {
             "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "self_literal",
             "named": true
           },
           {
@@ -1117,6 +1269,11 @@
     }
   },
   {
+    "type": "modifier",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "module_declaration",
     "named": true,
     "fields": {
@@ -1140,6 +1297,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1353,6 +1520,10 @@
           "named": true
         },
         {
+          "type": "typedef_declaration",
+          "named": true
+        },
+        {
           "type": "use_statement",
           "named": true
         },
@@ -1394,11 +1565,19 @@
             "named": true
           },
           {
+            "type": "me_literal",
+            "named": true
+          },
+          {
             "type": "member_expression",
             "named": true
           },
           {
             "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "self_literal",
             "named": true
           },
           {
@@ -1491,6 +1670,10 @@
           },
           {
             "type": "try_statement",
+            "named": true
+          },
+          {
+            "type": "typedef_declaration",
             "named": true
           },
           {
@@ -1788,6 +1971,10 @@
           "named": true
         },
         {
+          "type": "interface_type",
+          "named": true
+        },
+        {
           "type": "method_type",
           "named": true
         },
@@ -1796,6 +1983,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "typedef_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_hint",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1885,6 +2098,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2199,6 +2422,10 @@
     "named": false
   },
   {
+    "type": "hex_literal",
+    "named": true
+  },
+  {
     "type": "hidden",
     "named": false
   },
@@ -2219,6 +2446,10 @@
     "named": false
   },
   {
+    "type": "interface",
+    "named": false
+  },
+  {
     "type": "long_literal",
     "named": true
   },
@@ -2233,6 +2464,10 @@
   {
     "type": "nan_literal",
     "named": true
+  },
+  {
+    "type": "native",
+    "named": false
   },
   {
     "type": "new",
@@ -2292,6 +2527,10 @@
   },
   {
     "type": "try",
+    "named": false
+  },
+  {
+    "type": "typedef",
     "named": false
   },
   {

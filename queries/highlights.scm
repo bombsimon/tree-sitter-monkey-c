@@ -1,38 +1,62 @@
 "class" @keyword
 "module" @keyword
 "function" @keyword
-"if" @keyword
-"else" @keyword
-"switch" @keyword
-"case" @keyword
-"default" @keyword
-"for" @keyword
-"do" @keyword
-"while" @keyword
-"try" @keyword
-"catch" @keyword
-"finally" @keyword
-"throw" @keyword
-"return" @keyword
+"interface" @keyword
+"enum" @keyword
+"typedef" @keyword
+"extends" @keyword
+
+"if" @keyword.conditional
+"else" @keyword.conditional
+"switch" @keyword.conditional
+"case" @keyword.conditional
+"default" @keyword.conditional
+
+"for" @keyword.repeat
+"do" @keyword.repeat
+"while" @keyword.repeat
+
+"try" @keyword.exception
+"catch" @keyword.exception
+"finally" @keyword.exception
+"throw" @keyword.exception
+
+"return" @keyword.return
 "break" @keyword
 "continue" @keyword
+
 "var" @keyword
 "const" @keyword
-"enum" @keyword
-"extends" @keyword
-"import" @keyword
-"using" @keyword
 "as" @keyword
-"private" @keyword
-"public" @keyword
-"protected" @keyword
-"hidden" @keyword
-"static" @keyword
-"new" @keyword
-"instanceof" @keyword
-"and" @keyword
-"or" @keyword
-"has" @keyword
+
+"import" @keyword.import
+"using" @keyword.import
+
+;; Modifiers
+(modifier) @keyword.modifier
+
+;; Operator-like keywords
+"new" @keyword.operator
+"instanceof" @keyword.operator
+"and" @keyword.operator
+"or" @keyword.operator
+"has" @keyword.operator
+
+;; Operators
+[
+  "+" "-" "*" "/" "%"
+  "=" "==" "!=" "<" ">" "<=" ">="
+  "&&" "||" "!"
+  "&" "|" "^" "~" "<<" ">>"
+  "++" "--"
+  "+=" "-=" "*=" "/=" "%="
+  "&=" "|=" "^=" "<<=" ">>="
+  "=>"
+] @operator
+
+;; Punctuation
+["(" ")" "[" "]" "{" "}"] @punctuation.bracket
+["." "," ";" ":"] @punctuation.delimiter
 
 ;; Annotations like (:glance)
 (annotation) @attribute
@@ -48,6 +72,15 @@
 ;; Type names
 (type_name (identifier) @type)
 (type_name (qualified_identifier) @type)
+
+;; Constructor calls: `new Foo()`
+(new_expression constructor: (identifier) @constructor)
+(new_expression constructor: (type_name (identifier) @constructor))
+(new_expression constructor: (symbol_reference (identifier) @constructor))
+
+;; Interface members
+(interface_method name: (identifier) @function.method)
+(interface_variable name: (identifier) @variable)
 
 ;; Member access
 (member_expression property: (identifier) @property)
@@ -65,16 +98,20 @@
     (identifier) @function.call))
 
 (string_literal) @string
+(char_literal) @character
 (number_literal) @number
-(float_literal) @number
+(hex_literal) @number
+(float_literal) @number.float
 (long_literal) @number
-(double_literal) @number
-(char_literal) @string
+(double_literal) @number.float
 (boolean_literal) @boolean
 (null_literal) @constant.builtin
 (nan_literal) @constant.builtin
 (symbol_literal) @constant
-(me_literal) @keyword
-(self_literal) @keyword
+
+;; `me` and `self` are values, not keywords
+(me_literal) @variable.builtin
+(self_literal) @variable.builtin
+
 (comment) @comment
 (doc_comment) @comment.documentation
