@@ -56,7 +56,13 @@
 
 ;; Punctuation
 ["(" ")" "[" "]" "{" "}"] @punctuation.bracket
-["." "," ";" ":"] @punctuation.delimiter
+["." "," ";"] @punctuation.delimiter
+
+;; Only treat `:` as a delimiter where it cannot be part of a symbol literal
+;; (`:x`), symbol key, or dictionary entry.
+(ternary_expression ":" @punctuation.delimiter)
+(switch_case ":" @punctuation.delimiter)
+(default_case ":" @punctuation.delimiter)
 
 ;; Annotations like (:glance)
 (annotation) @attribute
